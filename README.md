@@ -1,1 +1,1 @@
-# zabbix-huawei-nce
+# Zabbix template for Huawei NCE monitoring
