@@ -1,0 +1,168 @@
+{
+    "zabbix_export": {
+        "version": "6.0",
+        "date": "2024-07-18T21:36:36Z",
+        "groups": [
+            {
+                "uuid": "46d26f83b00147178835f7d718dfeb39",
+                "name": "Templates/Huawei"
+            }
+        ],
+        "templates": [
+            {
+                "uuid": "a9e4b31c047b4fba90e9cbb15df5320f",
+                "template": "Template Huawei API - NCE",
+                "name": "Template Huawei API - NCE",
+                "description": "This template monitors active alerts in the Huawei NCE. \n\nIt captures current alarms to generate the same view in Zabbix, maintaining the integration flow.\n\nDate: 2024-07-18\n\nFor more details, visit my GitHub: higorcamposs/zabbix-huawei-nce/",
+                "groups": [
+                    {
+                        "name": "Templates/Huawei"
+                    }
+                ],
+                "items": [
+                    {
+                        "uuid": "1c9c096bc9f941809c26df8c44bb2608",
+                        "name": "Get alerts Huawei API - NCE-Campus V300R023C00",
+                        "type": "EXTERNAL",
+                        "key": "getAlertsHuaweiNCE.py[{$USER.API},{$PASS.API},{$URL.API},{$PORT.API}]",
+                        "delay": "10m",
+                        "history": "0",
+                        "trends": "0",
+                        "value_type": "TEXT"
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "uuid": "08966691432a4a96856100266d866155",
+                        "name": "Filter the API result",
+                        "type": "DEPENDENT",
+                        "key": "filterApiResult",
+                        "delay": "0",
+                        "lifetime": "1d",
+                        "item_prototypes": [
+                            {
+                                "uuid": "b415216a973c4509b3bf4ce60b772652",
+                                "name": "[{#IPADDRESS}] {#EVENTTYPE}: {#NATIVEPROBABLECAUSE} - {#PERCEIVEDSEVERITY} ({#LASTCHANGE})",
+                                "type": "CALCULATED",
+                                "key": "key[{#ID}]",
+                                "delay": "10m",
+                                "history": "1d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "params": "{#PERCEIVEDSEVERITY}",
+                                "preprocessing": [
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "1h"
+                                        ]
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "uuid": "26b7a7c36e7b4a2b9eba098e13608730",
+                                        "expression": "last(/Template Huawei API - NCE/key[{#ID}])<>\"cleared\"",
+                                        "name": "[{#PERCEIVEDSEVERITY}] {#NATIVEPROBABLECAUSE} on the {#NENAME}",
+                                        "description": "{#EVENTTYPE}: {#IPADDRESS}\n{#REPAIRACTION}\n{#PROBABLECAUSE}"
+                                    }
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "getAlertsHuaweiNCE.py[{$USER.API},{$PASS.API},{$URL.API},{$PORT.API}]"
+                        },
+                        "preprocessing": [
+                            {
+                                "type": "STR_REPLACE",
+                                "parameters": [
+                                    "{\"alarm\":[",
+                                    "["
+                                ]
+                            },
+                            {
+                                "type": "STR_REPLACE",
+                                "parameters": [
+                                    "}}]}",
+                                    "}}]"
+                                ]
+                            },
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "output = JSON.parse(value).map(function(faults){\nreturn {\n        \"{#LASTCHANGE}\": faults[\"resource-alarm-parameters\"][\"last-changed\"],\n        \"{#PERCEIVEDSEVERITY}\": faults[\"resource-alarm-parameters\"][\"perceived-severity\"],\n        \"{#EVENTTYPE}\": faults[\"x733-alarm-parameters\"][\"event-type\"],\n        \"{#ID}\": faults[\"alarm-parameters\"][\"alarm-serial-number\"],\n        \"{#NATIVEPROBABLECAUSE}\": faults[\"alarm-parameters\"][\"native-probable-cause\"],\n        \"{#REPAIRACTION}\": faults[\"alarm-parameters\"][\"repair-action\"],\n        \"{#PROBABLECAUSE}\": faults[\"alarm-parameters\"][\"probable-cause\"],\n        \"{#NENAME}\": faults[\"alarm-parameters\"][\"ne-name\"],\n        \"{#IPADDRESS}\": faults[\"alarm-parameters\"][\"ip-address\"]\n    };\n});\nreturn JSON.stringify({\"data\": output})"
+                                ]
+                            }
+                        ],
+                        "overrides": [
+                            {
+                                "name": "Define severity",
+                                "step": "1",
+                                "filter": {
+                                    "conditions": [
+                                        {
+                                            "macro": "{#PERCEIVEDSEVERITY}",
+                                            "operator": "EXISTS",
+                                            "formulaid": "A"
+                                        }
+                                    ]
+                                },
+                                "operations": [
+                                    {
+                                        "operationobject": "TRIGGER_PROTOTYPE",
+                                        "operator": "LIKE",
+                                        "value": "major",
+                                        "status": "ENABLED",
+                                        "discover": "DISCOVER",
+                                        "severity": "AVERAGE"
+                                    },
+                                    {
+                                        "operationobject": "TRIGGER_PROTOTYPE",
+                                        "operator": "LIKE",
+                                        "value": "critical",
+                                        "status": "ENABLED",
+                                        "discover": "DISCOVER",
+                                        "severity": "HIGH"
+                                    },
+                                    {
+                                        "operationobject": "TRIGGER_PROTOTYPE",
+                                        "operator": "LIKE",
+                                        "value": "minor",
+                                        "status": "ENABLED",
+                                        "discover": "DISCOVER",
+                                        "severity": "WARNING"
+                                    },
+                                    {
+                                        "operationobject": "TRIGGER_PROTOTYPE",
+                                        "operator": "LIKE",
+                                        "value": "warning",
+                                        "status": "ENABLED",
+                                        "discover": "DISCOVER",
+                                        "severity": "INFO"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$PASS.API}",
+                        "description": "Enter your password here"
+                    },
+                    {
+                        "macro": "{$PORT.API}",
+                        "description": "By default, the communication port is 18002"
+                    },
+                    {
+                        "macro": "{$URL.API}",
+                        "description": "Enter the NCE url here"
+                    },
+                    {
+                        "macro": "{$USER.API}",
+                        "description": "Enter the user here"
+                    }
+                ]
+            }
+        ]
+    }
+}
