@@ -2,6 +2,8 @@
 ---
 > **📢 If you have any considerations, suggestions, or questions, feel free to contact me! I am available to help.**
 
+> **👤 For detailed instructions on how to create user in the Huawei NCE, please refer to the documentation available in the `users` directory.**
+
 ---
 This template monitors the active alerts in the NCE.
 
