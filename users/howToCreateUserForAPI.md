@@ -10,7 +10,7 @@ Go to:
 
 > System >> User management
 
-![System Navigation](imgs/roles.jpeg)
+![System Navigation](zabbix-huawei-nce/imgs/roles.jpeg)
 
 ### 2. Create a New User
 
