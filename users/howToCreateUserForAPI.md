@@ -10,7 +10,7 @@ Go to:
 
 > System >> User management
 
-![System Navigation](../imgs/roles.jpeg)
+![System Navigation](../imgs/usermanagement.png)
 
 ### 2. Create a New User
 
