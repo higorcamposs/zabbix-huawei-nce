@@ -2,6 +2,7 @@
 
 > 📢 If you have any considerations, suggestions, or questions, feel free to contact me! I am available to help.
 
+---
 This template monitors the active alerts in the NCE.
 
 The intention is to capture the current alarms to generate the same view in Zabbix, maintaining the integration flow.
