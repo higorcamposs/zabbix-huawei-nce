@@ -5,8 +5,8 @@ import urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-nbi_name = sys.argv[1]
-nbi_pwd = sys.argv[2]
+username = sys.argv[1]
+password = sys.argv[2]
 host = sys.argv[3]
 port = sys.argv[4]
 
@@ -16,7 +16,7 @@ GET_SITES_URL = "/restconf/v1/data/ietf-alarms:alarms/alarm-list?limit=2000&is-c
 post_token_url = "https://" + host + ":" + port + POST_TOKEN_URL
 headers_post = {'Content-Type': 'application/json', 'Accept': 'application/json'}
 
-r = requests.post(post_token_url, headers=headers_post, json={"userName": nbi_name, "password": nbi_pwd}, verify=False)
+r = requests.post(post_token_url, headers=headers_post, json={"userName": username, "password": password}, verify=False)
 
 token_id = r.json()['data']['token_id']
 get_sites_url = "https://" + host + ":" + port + GET_SITES_URL
