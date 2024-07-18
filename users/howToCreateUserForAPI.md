@@ -6,21 +6,19 @@ This guide provides detailed instructions for creating a user in the Huawei NCE.
 
 ### 1. Navigate to User Management
 
-Go to:
-
-> **System >> User management**
+Go to: ***System >> User management***
 
 ### 2. Create a New User
 
-In the User Management section, click on the *Create* button.
+In the User Management section, click on the ***Create*** button.
 
 ### 3. Set User Type
 
-In the user creation form, set the user type to *"Third-party"*.
+In the user creation form, set the user type to ***Third-party***.
 
 ### 4. Select Permissions
 
-Select the option *"Open Api Monitor"*.
+Select the option ***"Open Api Monitor"***.
 
 ### Additional Information
 
